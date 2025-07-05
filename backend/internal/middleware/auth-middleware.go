@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
@@ -16,20 +17,26 @@ func UserAuthMiddleware(c *gin.Context) {
         return
     }
 
-    cookie, err := c.Request.Cookie("token")
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization Header"})
+    authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization Header"})
 		return
 	}
 
-	claims, err := helpers.VerifyToken(cookie.Value)
+	parts := strings.SplitN(authHeader, " ", 2)
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization format"})
+		return
+	}
+
+	claims, err := helpers.VerifyToken(parts[1])
 	if err != nil {
 		if err.Error() == "token has invalid claims: token is expired" {
 			c.Redirect(http.StatusFound, "/auth/google/authorize")
 			return
 		}
 
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 

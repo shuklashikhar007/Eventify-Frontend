@@ -36,13 +36,13 @@ func LoadEnvVariables(filenames ...string) {
 	}
 
 	Env = &EnvVariables{
-		Port                  : getenv("PORT", "8080"),
+		Port                  : getenv("PORT", "3000"),
 		DatabaseUrl           : getenv("DATABASE_URL", "/tmp/local.db"),
 		AllowedOrigins        : getenv("ALLOW_ORIGINS", "https://eventify.tanishqsingh.com,http://localhost:5173"),
 		GoogleClientID        : getenv("GOOGLE_CLIENT_ID", ""),
 		GoogleClientSecret    : getenv("GOOGLE_CLIENT_SECRET", ""),
 		JWTSecretKey          : getenv("JWT_SECRET", ""),
-		SelfOrigin            : getenv("SELF_ORIGIN", fmt.Sprintf("http://localhost:%s", getenv("PORT", "8080"))),
-		RedirectURL		      : getenv("REDIRECT_URL", fmt.Sprintf("http://localhost:%s/auth/protected", getenv("PORT", "8080"))),
+		SelfOrigin            : getenv("SELF_ORIGIN", fmt.Sprintf("http://localhost:%s", getenv("PORT", "3000"))),
+		RedirectURL		      : getenv("REDIRECT_URL", fmt.Sprintf("http://localhost:%s/auth/protected", getenv("PORT", "3000"))),
 	}
 }
