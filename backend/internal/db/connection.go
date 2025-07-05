@@ -31,7 +31,7 @@ func NewDbConnection(path string) {
 		log.Fatalf("cannot open db: %v", err)
 	}
 
-	if err := database.AutoMigrate(models.User{}); err != nil {
+	if err := database.AutoMigrate(&models.User{}, &models.Event{}, &models.EventUpdater{}); err != nil {
 		log.Fatalf("auto-migrate failed: %v", err)
 	}
 
