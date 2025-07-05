@@ -1,0 +1,24 @@
+FROM golang:1.24.4-alpine AS builder
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+RUN apk add --no-cache build-base sqlite-dev
+
+COPY cmd/ cmd/
+COPY internal/ internal/
+
+RUN go build -o main cmd/server/main.go
+
+FROM alpine:latest
+
+RUN apk add --no-cache sqlite-libs
+
+WORKDIR /app
+COPY --from=builder /app/main .
+
+EXPOSE 3000
+
+CMD ["./main"]
