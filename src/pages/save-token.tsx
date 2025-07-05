@@ -1,24 +1,14 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
 
 const SaveToken = () => {
-    const navigate = useNavigate();
     const { token } = useParams();
 
     useEffect(() => {
-        if (token) {
-            // Save token to cookie
-            Cookies.set("token", token, {
-                expires: 7, // days
-                secure: true,
-                sameSite: "Strict",
-            });
-        }
+        if (token) localStorage.setItem("token", token);
 
-        // Redirect to home
-        navigate("/");
-    }, [token, navigate]);
+        window.location.href = "/";
+    }, [token]);
 
     return null;
 };

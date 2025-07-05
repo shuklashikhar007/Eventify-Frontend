@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import Cookies from "js-cookie";
 
 const AUTH_ENDPOINT = `${import.meta.env.VITE_BACKEND_URL}/auth/user`;
 const AUTHORIZE_ENDPOINT = `${import.meta.env.VITE_BACKEND_URL}/auth/google/authorize`;
@@ -34,15 +33,22 @@ export const useUserStore = create<UserStore>((set) => ({
     },
 
     logout: () => {
-        Cookies.remove("token");
+        localStorage.removeItem("token");
         window.location.href = LOGOUT_ENDPOINT;
         set({ user: null });
     },
 
     refresh: async () => {
+        const token = localStorage.getItem("token");
         try {
+            if (!token) throw new Error("not logged in");
+
             set({ isLoading: true });
-            const res = await fetch(AUTH_ENDPOINT, { credentials: "include" });
+            const res = await fetch(AUTH_ENDPOINT, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             const data = await res.json();
 
             if (res.status !== 200 || !data.user) {
@@ -51,6 +57,7 @@ export const useUserStore = create<UserStore>((set) => ({
 
             set({ user: data.user });
         } catch (err) {
+            console.error((err as Error).message);
             set({ user: null });
         } finally {
             set({ isLoading: false });
