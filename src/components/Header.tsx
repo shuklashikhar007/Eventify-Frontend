@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./header.css";
+import { useUserStore } from "@/store/user";
 
 export default function Header() {
+    const { user, login, logout } = useUserStore();
+
     const [isOpen, setIsOpen] = useState(false);
     const [isDark, setIsDark] = useState(() => {
         return localStorage.getItem("theme") === "dark";
@@ -34,6 +37,13 @@ export default function Header() {
                     <Link to="/events">Events</Link>
                     <Link to="/about">About</Link>
                     <Link to="/contact">Contact</Link>
+                    {user ? (
+                        <button type="button" onClick={logout}>logout</button>
+                    ) : (
+                        <button type="button" onClick={login}>
+                            login
+                        </button>
+                    )}
                     <Link to="/create" className="cta">
                         + Create Event
                     </Link>

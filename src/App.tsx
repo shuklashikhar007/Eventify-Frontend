@@ -15,13 +15,16 @@ import Admins from "./components/Admins";
 
 import { useUserStore } from "@/store/user";
 import { useEffect } from "react";
+import SaveToken from "./pages/save-token";
 
 function App() {
-    const refresh = useUserStore((s) => s.refresh);
+    const { refresh, isLoading } = useUserStore();
 
     useEffect(() => {
         (async () => await refresh())();
     }, []);
+
+    if (isLoading) return <h1>loading...</h1>;
 
     return (
         <div className="app-layout">
@@ -29,6 +32,7 @@ function App() {
             <main className="main-content">
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/save-token/:token" element={<SaveToken />} />
                     <Route path="/Events" element={<Events />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
