@@ -2,6 +2,7 @@ package event
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shuklashikhar007/Eventify/backend/internal/middleware"
@@ -46,7 +47,10 @@ func (h *EventHandler) RegisterRoutes(r *gin.RouterGroup) {
 // path: GET /event
 // description: AllEvents route that returns a simple "OK" response.
 func (h *EventHandler) AllEvents(c *gin.Context) {
-	events, err := h.eventRepo.All()
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "10"))
+
+	events, err := h.eventRepo.All(page, pageSize)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch events"})
 		return

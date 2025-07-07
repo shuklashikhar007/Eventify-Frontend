@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"math"
 	"time"
 
 	"gorm.io/gorm"
@@ -19,9 +20,15 @@ func NewEventRepository(db *gorm.DB) *EventRepository {
 }
 
 // All returns all event from the database without event updaters details.
-func (r *EventRepository) All() ([]models.Event, error) {
+func (r *EventRepository) All(page int, pageSize int) ([]models.Event, error) {
 	var list []models.Event
-	return list, r.db.Preload("CreatedBy").Find(&list).Error
+
+	page = int(math.Max(float64(page), 1)) // page number
+	pageSize = int(math.Max(float64(pageSize), 10)) // minimum 10 events per page
+
+	offset := (page - 1) * pageSize
+
+	return list, r.db.Preload("CreatedBy").Limit(pageSize).Offset(offset).Find(&list).Error
 }
 
 // GetById returns a event by its ID
