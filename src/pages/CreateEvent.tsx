@@ -1,44 +1,54 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import "./CreateEvent.css";
+import { useUserStore } from "@/store/user";
+import { useEventStore, type CreateEventPayload } from "@/store/event";
+import { useNavigate } from "react-router";
 
 const CreateEvent = () => {
-    const [event, setEvent] = useState({
-        title: "",
-        society: "",
-        details: "",
-        isPaid: false,
-        target: "",
-        mediaLink: "",
-    });
+    const navigate = useNavigate();
 
-    const handleChange = (e: ChangeEvent<any>) => {
-        const { name, value, type, checked } = e.target;
-        setEvent((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
-    };
+    const user = useUserStore((s) => s.user);
+    const { createEvent } = useEventStore();
 
-    const handleSubmit = (e: FormEvent) => {
+    const [title, setTitle] = useState("title 1");
+    const [description, setDescription] = useState("desc");
+    const [location, setLocation] = useState("loca1");
+
+    const [eventStartTime, setEventStartTime] = useState(new Date().toISOString());
+    const [eventEndTime, setEventEndTime] = useState(new Date().toISOString());
+
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(event);
-        alert("🎉 Event created (Frontend Only)");
+        const event: CreateEventPayload = {
+            title,
+            description,
+            location,
+            event_start_time: eventStartTime,
+            event_end_time: eventEndTime,
+            is_canceled: false,
+            is_rescheduled: false,
+        };
+
+        const event_id = await createEvent(event);
+    
+        if (event_id) navigate(`/event/${event_id}`);
     };
 
     return (
         <div className="create-event-container">
             <h1>Create a New Event</h1>
-            <form className="create-event-form" onSubmit={handleSubmit}>
-                <input type="text" name="title" placeholder="Event Title" value={event.title} onChange={handleChange} required />
-                <input type="text" name="society" placeholder="Organizing Club / Society" value={event.society} onChange={handleChange} required />
-                <textarea name="details" placeholder="Event Description / Details" value={event.details} onChange={handleChange} required />
-                <label className="checkbox-container">
-                    <input type="checkbox" name="isPaid" checked={event.isPaid} onChange={handleChange} />
-                    Is the event Paid?
-                </label>
-                <input type="text" name="target" placeholder="Target Audience (e.g., All Years, CSE)" value={event.target} onChange={handleChange} required />
-                <input type="text" name="mediaLink" placeholder="Link to Instagram / Poster / Website" value={event.mediaLink} onChange={handleChange} />
-                <button type="submit">➕ Submit Event</button>
+            <form onSubmit={handleSubmit}>
+                <input type="text" required minLength={2} maxLength={200} placeholder="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" required minLength={2} maxLength={1000} placeholder="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <input type="text" required minLength={2} maxLength={255} placeholder="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+
+                <input type="datetime-local" required placeholder="start time" value={eventStartTime.slice(0, 16)} onChange={(e) => setEventStartTime(e.target.value)} />
+                <input type="datetime-local" required placeholder="end time" value={eventEndTime.slice(0, 16)} onChange={(e) => setEventEndTime(e.target.value)} />
+
+                <button type="submit" disabled={!user}>
+                    submit
+                </button>
+                {!user && <p className="error">Please login to create an event.</p>}
             </form>
         </div>
     );

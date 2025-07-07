@@ -16,6 +16,8 @@ import Admins from "./components/Admins";
 import { useUserStore } from "@/store/user";
 import { useEffect } from "react";
 import SaveToken from "./pages/save-token";
+import EventPage from "./pages/event";
+import EditEvent from "./pages/edit-event";
 
 function App() {
     const { refresh, isLoading } = useUserStore();
@@ -34,6 +36,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/save-token/:token" element={<SaveToken />} />
                     <Route path="/Events" element={<Events />} />
+                    <Route path="/event/:event_id" element={<EventPage />} />
+                    <Route path="/edit-event/:event_id" element={<EditEvent />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/CreateEvent" element={<CreateEvent />} />
