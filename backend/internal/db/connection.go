@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"strings"
 
 	"github.com/shuklashikhar007/Eventify/backend/internal/models"
 	"gorm.io/driver/postgres"
@@ -18,7 +19,7 @@ func NewDbConnection(path string) {
 		log.Fatal("database path cannot be empty")
 	}
 	
-	if path[len(path)-3:] == ".db" {
+	if strings.HasSuffix(path, ".db") {
 		log.Println("using sqlite database")
 		dialector = sqlite.Open(path)
 	} else {
@@ -30,6 +31,14 @@ func NewDbConnection(path string) {
 	if err != nil {
 		log.Fatalf("cannot open db: %v", err)
 	}
+
+	sqlDB, err := database.DB()
+	if err != nil {
+		log.Fatalf("cannot get sql.DB from GORM: %v", err)
+	}
+
+	sqlDB.SetMaxOpenConns(25)                  // max open connections
+	sqlDB.SetMaxIdleConns(5)                   // max idle connections
 
 	if err := database.AutoMigrate(&models.User{}, &models.Event{}, &models.EventUpdater{}); err != nil {
 		log.Fatalf("auto-migrate failed: %v", err)
