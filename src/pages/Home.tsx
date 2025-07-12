@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import "./home.css";
 import { motion } from "framer-motion";
-import { useUserStore } from "@/store/user";
 
 const Home = () => {
-    const user = useUserStore((s) => s.user);
-
     return (
         <div className="home-container">
             <motion.h1 initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="homepage-heading">
@@ -32,13 +29,6 @@ const Home = () => {
                     ➕ Create New Event
                 </Link>
             </motion.div>
-
-            {user && (
-                <div className="welcome-message">
-                    <p>Welcome back, {user.name}!</p>
-                    {user.image_url && <img src={user.image_url} alt="" />}
-                </div>
-            )}
         </div>
     );
 };
