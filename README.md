@@ -1,4 +1,4 @@
-# 🎉 Eventify — College Event Management Platform  
+<h1 align="center">🎉 Eventify — College Event Management Platform</h1> 
 > Built in collaboration with [@oyetanishq](https://github.com/oyetanishq) & [@shuklashikhar007](https://github.com/shuklashikhar007)
 
 ---
