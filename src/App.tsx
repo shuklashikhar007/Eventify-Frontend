@@ -39,7 +39,7 @@ function App() {
     return (
         <div className="app-layout">
             <Header />
-            <main className="main-content flex justify-between items-center">
+            <main className="main-content flex justify-center items-center">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/save-token/:token" element={<SaveToken />} />
