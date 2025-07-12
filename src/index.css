@@ -6,7 +6,6 @@
 html,
 body,
 #root {
-    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -14,12 +13,11 @@ body,
 .app-layout {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .main-content {
     flex: 1;
-    padding: 2rem;
     background-color: var(--bg);
     color: var(--text);
     transition: background-color 0.3s ease, color 0.3s ease;

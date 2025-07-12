@@ -1,9 +1,9 @@
 .socials-page {
-    min-height: 100vh;
     background-color: var(--bg, #1e293b);
     color: var(--text, #f1f5f9);
     padding: 2rem;
     text-align: center;
+    width: 100%;
 }
 
 .profile-card,
@@ -13,7 +13,7 @@
     padding: 1.5rem;
     margin: 2rem auto;
     border-radius: 12px;
-    max-width: 500px;
+    max-width: 400px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     transition: transform 0.3s ease;
 }
