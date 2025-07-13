@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -204,6 +205,17 @@ func (h *AuthUserHandler) OAuthCallback(c *gin.Context) {
 	user.Email = userData.Email
 	user.Name = userData.Name
 	user.ImageURL = userData.AvatarURL
+
+	// there are two college email id's provided by
+	// Indidan Institute of Technology (BHU) Varanasi
+	_, isCollegeId1 := strings.CutSuffix(user.Email, "@itbhu.ac.in")
+	_, isCollegeId2 := strings.CutSuffix(user.Email, "@iitbhu.ac.in")
+
+	if !isCollegeId1 && !isCollegeId2 {
+		redirect_url := fmt.Sprintf("%s/message/only @itbhu.ac.in or @iitbhu.ac.in email id valid.", config.Env.RedirectURL)
+		c.Redirect(http.StatusTemporaryRedirect, redirect_url)
+		return
+	}
 
 	token, err := h.userRepo.CreateNewUserOrToken(&user)
 	if err != nil {
