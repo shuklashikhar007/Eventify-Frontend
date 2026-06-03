@@ -27,14 +27,10 @@ app.get("/", (_req, res) => res.json({ status: "ok", service: "Eventify API" }))
 
 // 404 handler
 app.use((_req, res) => res.status(404).json({ message: "Route not found." }));
-
-// Global error handler
 app.use((err, _req, res, _next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({ message: "Internal server error." });
 });
-
-// ── Start ────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
 connectDB().then(() => {
