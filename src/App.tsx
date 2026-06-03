@@ -32,35 +32,43 @@ function App() {
 
     if (isLoading)
         return (
-            <div className="min-h-dvh w-full flex flex-col gap-2 justify-center items-center">
-                <Loader className="size-6 animate-spin" />
-                <span className="text-xs sm:text-sm animate-pulse">please wait</span>
+            // FIX: Added dark: variants for the loading screen
+            <div className="min-h-screen w-full flex flex-col gap-3 justify-center items-center bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-200 selection:bg-indigo-500">
+                <Loader className="size-8 text-indigo-600 dark:text-indigo-500 animate-spin transition-all duration-300" />
+                <span className="text-xs sm:text-sm font-medium tracking-widest text-slate-500 dark:text-slate-400 uppercase animate-pulse">
+                    Please wait
+                </span>
             </div>
         );
 
     return (
-        <div className="app-layout">
+        // FIX: Dynamic light/dark backgrounds with a smooth transition
+        <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 selection:bg-indigo-500 selection:text-white antialiased">
             <Header />
-            <main className="main-content flex justify-center items-center">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/save-token/:token" element={<SaveToken />} />
-                    <Route path="/Events" element={<Events />} />
-                    <Route path="/event/:event_id" element={<EventPage />} />
-                    <Route path="/edit-event/:event_id" element={<EditEvent />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/CreateEvent" element={<CreateEvent />} />
-                    <Route path="/Instagram" element={<Instagram />} />
-                    <Route path="/Github" element={<GitHub />} />
-                    <Route path="/LinkedIn" element={<LinkedIn />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/Signup" element={<Signup />} />
-                    <Route path="/Admins" element={<Admins />} />
-                    <Route path="/message/:text" element={<Message />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+            
+            <main className="flex-grow w-full flex justify-center py-6 sm:py-10 transition-all duration-300">
+                <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/save-token/:token" element={<SaveToken />} />
+                        <Route path="/Events" element={<Events />} />
+                        <Route path="/event/:event_id" element={<EventPage />} />
+                        <Route path="/edit-event/:event_id" element={<EditEvent />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/CreateEvent" element={<CreateEvent />} />
+                        <Route path="/Instagram" element={<Instagram />} />
+                        <Route path="/Github" element={<GitHub />} />
+                        <Route path="/LinkedIn" element={<LinkedIn />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/Signup" element={<Signup />} />
+                        <Route path="/Admins" element={<Admins />} />
+                        <Route path="/message/:text" element={<Message />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </div>
             </main>
+            
             <Footer />
         </div>
     );
