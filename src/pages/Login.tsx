@@ -7,7 +7,6 @@ import { Loader, Mail, Lock, LogIn, AlertCircle } from "lucide-react";
 const Login = () => {
     const navigate = useNavigate();
     const { login } = useUserStore();
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);

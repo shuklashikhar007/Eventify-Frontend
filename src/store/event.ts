@@ -1,17 +1,11 @@
 import { create } from "zustand";
-
 const API_BASE = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:3000";
-
-//
-// ─── Types that mirror Go models ─────────────────────────────────────────────
-//
 export interface User {
     ID: string;
     name: string;
     image_url: string | null;
     email: string;
 }
-
 export interface EventUpdater {
     event_updater_id: string;
     ref_event_id: string;
@@ -19,7 +13,6 @@ export interface EventUpdater {
     updated_by: User;
     UpdatedAt: string; // ISO
 }
-
 export interface Event {
     event_id: string;
     CreatedAt: string;
@@ -35,7 +28,6 @@ export interface Event {
     created_by: User;
     event_updaters: EventUpdater[];
 }
-
 export type CreateEventPayload = Omit<Event, "event_id" | "CreatedAt" | "UpdatedAt" | "created_by_id" | "created_by" | "event_updaters">;
 
 //
@@ -48,9 +40,8 @@ interface EventState {
     updateEvent: (event_id: string, payload: Partial<Event>) => Promise<string | null>;
     deleteEvent: (event_id: string) => Promise<boolean>;
 }
-
 export const useEventStore = create<EventState>()(() => ({
-    // ─── Load Events (based on page number) ───────────────────────────
+    // Load Events 
     loadEvents: async (page: number = 1) => {
         let events: Event[] = [];
         try {
@@ -64,8 +55,7 @@ export const useEventStore = create<EventState>()(() => ({
             return events;
         }
     },
-
-    // ─── Create ───────────────────────────────────────────────────────
+    // Create 
     createEvent: async (payload) => {
         let event_id: string | null = null;
         try {
@@ -88,8 +78,7 @@ export const useEventStore = create<EventState>()(() => ({
             return event_id;
         }
     },
-
-    // ─── GET ──────────────────────────────────────────────────────────
+    // GET 
     getEventById: async (event_id) => {
         let data: Event | undefined;
 
@@ -103,8 +92,7 @@ export const useEventStore = create<EventState>()(() => ({
             return data;
         }
     },
-
-    // ─── Update ───────────────────────────────────────────────────────
+    // Update
     updateEvent: async (event_id, payload) => {
         let updated_event_id: string | null = "";
         try {
@@ -125,8 +113,7 @@ export const useEventStore = create<EventState>()(() => ({
             return updated_event_id;
         }
     },
-
-    // ─── Delete ───────────────────────────────────────────────────────
+    //  Delete 
     deleteEvent: async (event_id) => {
         let deleted = false;
         try {
@@ -136,7 +123,6 @@ export const useEventStore = create<EventState>()(() => ({
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-
             deleted = res.status === 200;
         } catch (err: any) {
             deleted = false;
